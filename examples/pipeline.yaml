@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: example-opa-policy-pipeline
+spec:
+  workspaces:
+    - name: shared-workspace
+
+  tasks:
+    - name: opa-policy-check
+      taskRef:
+        name: opa-policy-check
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+      params:
+        - name: policy
+          value: policies/sbom-required.rego
+        - name: input
+          value: examples/input.json
+        - name: query
+          value: data.cicd.allow
