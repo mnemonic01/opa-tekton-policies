@@ -1,0 +1,10 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: opa-policy-test-run
+spec:
+  pipelineRef:
+    name: example-opa-policy-pipeline
+  workspaces:
+    - name: shared-workspace
+      emptyDir: {}

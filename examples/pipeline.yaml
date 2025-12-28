@@ -7,7 +7,23 @@ spec:
     - name: shared-workspace
 
   tasks:
+    - name: clone-repo
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+      params:
+        - name: url
+          value: https://github.com/mnemonic01/opa-tekton-policies.git
+        - name: revision
+          value: main
+        - name: deleteExisting
+          value: "true"
+
     - name: opa-policy-check
+      runAfter:
+        - clone-repo
       taskRef:
         name: opa-policy-check
       workspaces:

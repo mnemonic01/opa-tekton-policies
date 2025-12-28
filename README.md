@@ -1,4 +1,4 @@
-# OPA Policy Checks for Tekton CI/CD
+# A Reference Pattern for Policy Enforcement in CI/CD
 
 This repository provides a minimal and reusable way to enforce **policy-as-code**
 in **Tekton CI/CD pipelines** using **Open Policy Agent (OPA)**.
