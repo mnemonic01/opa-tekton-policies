@@ -11,8 +11,8 @@ spec:
       taskRef:
         name: git-clone
       workspaces:
-        - name: output
-          workspace: shared-workspace
+        - name: output                 # ← task-local naam (git-clone)
+          workspace: shared-workspace  # ← pipeline workspace
       params:
         - name: url
           value: https://github.com/mnemonic01/opa-tekton-policies.git
@@ -22,12 +22,11 @@ spec:
           value: "true"
 
     - name: opa-policy-check
-      runAfter:
-        - clone-repo
+      runAfter: [clone-repo]
       taskRef:
         name: opa-policy-check
       workspaces:
-        - name: source
+        - name: output                 # ← MOET 'output' zijn
           workspace: shared-workspace
       params:
         - name: policy

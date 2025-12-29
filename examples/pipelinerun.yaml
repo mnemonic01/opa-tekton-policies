@@ -6,5 +6,6 @@ spec:
   pipelineRef:
     name: example-opa-policy-pipeline
   workspaces:
-    - name: shared-workspace
-      emptyDir: {}
+  - name: shared-workspace
+    persistentVolumeClaim:
+      claimName: opa-workspace-pvc
