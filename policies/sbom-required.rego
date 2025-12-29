@@ -1,9 +1,9 @@
+rego
+
 package cicd
 
-# Default: deny
 default allow = false
 
-# Allow when an SBOM is generated
-allow {
-  input.sbom.generated == true
+allow if {
+  input.sbom.present == true
 }
