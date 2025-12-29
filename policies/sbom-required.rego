@@ -1,4 +1,3 @@
-rego
 
 package cicd
 
