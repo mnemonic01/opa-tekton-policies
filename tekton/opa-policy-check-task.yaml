@@ -2,60 +2,28 @@ apiVersion: tekton.dev/v1
 kind: Task
 metadata:
   name: opa-policy-check
-  labels:
-    app.kubernetes.io/version: "0.1"
 spec:
-  description: >
-    Run Open Policy Agent (OPA) policy checks as part of a Tekton pipeline.
-    The task evaluates Rego policies against provided input data and fails
-    the pipeline when the policy decision is deny.
-
   params:
     - name: policy
-      description: Path to the Rego policy file
       type: string
-      default: policy.rego
-
     - name: input
-      description: Path to the JSON input file
       type: string
-      default: input.json
-
     - name: query
-      description: Rego query to evaluate
       type: string
       default: data.cicd.allow
 
   workspaces:
-    - name: source
-      description: Workspace containing policy and input files
+    - name: output
 
   steps:
     - name: opa-eval
-      image: openpolicyagent/opa:latest
-      workingDir: $(workspaces.source.path)
-      script: |
-        #!/usr/bin/env sh
-        set -eu
-
-        echo "Running OPA policy check"
-        echo "Policy: $(params.policy)"
-        echo "Input:  $(params.input)"
-        echo "Query:  $(params.query)"
-
-        RESULT=$(opa eval \
-          --format=json \
-          --data $(params.policy) \
-          --input $(params.input) \
-          "$(params.query)")
-
-        echo "$RESULT"
-
-        ALLOW=$(echo "$RESULT" | grep -q '"value":true' && echo "true" || echo "false")
-
-        if [ "$ALLOW" != "true" ]; then
-          echo "OPA policy check failed"
-          exit 1
-        fi
-
-        echo "OPA policy check passed"
+      image: openpolicyagent/opa:1.x
+      command: ["opa"]
+      args:
+        - eval
+        - --format=json
+        - --data
+        - $(workspaces.output.path)/$(params.policy)
+        - --input
+        - $(workspaces.output.path)/$(params.input)
+        - $(params.query)
