@@ -17,7 +17,7 @@ spec:
 
   steps:
     - name: opa-eval
-      image: openpolicyagent/opa:1.x
+      image: openpolicyagent/opa:latest
       command: ["opa"]
       args:
         - eval
